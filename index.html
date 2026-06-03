@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>raw.traces</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --nero: #080808;
+  --bianco: #f4f2ed;
+  --grigio: #7a7a7a;
+  --grigio-chiaro: #ccc9c2;
+  --grigio-medio: #3a3a3a;
+  --verde: #2a7a4a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background:var(--bianco);
+  color:var(--nero);
+  font-family:'EB Garamond', serif;
+  font-size:17px;
+  line-height:1.75;
+  cursor:default;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:var(--bianco); border-bottom:1px solid var(--nero);
+  padding:0 60px; height:52px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  font-family:'Space Mono',monospace; font-size:11px;
+  font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--nero); text-decoration:none; cursor:pointer;
+}
+.nav-links { display:flex; gap:40px; list-style:none; }
+.nav-links a {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--grigio); text-decoration:none; cursor:pointer;
+  transition:color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color:var(--nero); }
+
+/* ── PAGES ── */
+.page { display:none; min-height:100vh; padding-top:52px; }
+.page.visible { display:block; }
+
+/* ── HOME ── */
+#page-home .hero {
+  height:calc(100vh - 52px);
+  display:grid; grid-template-columns:1fr 1fr;
+}
+#page-home .hero-image {
+  background:var(--nero); overflow:hidden; position:relative;
+}
+#page-home .hero-image img {
+  width:100%; height:100%; object-fit:cover; opacity:0.85; display:block;
+}
+#page-home .hero-image .placeholder {
+  width:100%; height:100%; background:#111;
+  display:flex; align-items:center; justify-content:center;
+}
+#page-home .hero-text {
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:60px; border-left:1px solid var(--nero);
+}
+#page-home .hero-text .top {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.25em; text-transform:uppercase; color:var(--grigio);
+}
+#page-home .hero-text h1 {
+  font-size:clamp(52px,7vw,96px); font-weight:400;
+  line-height:0.9; letter-spacing:-0.025em;
+}
+#page-home .hero-text h1 em { font-style:italic; color:var(--grigio); }
+#page-home .hero-footer {
+  border-top:1px solid var(--grigio-chiaro); padding-top:28px;
+}
+.nav-items { display:flex; flex-direction:column; }
+.nav-item {
+  display:flex; align-items:baseline; justify-content:space-between;
+  padding:14px 0; border-top:1px solid var(--grigio-chiaro);
+  cursor:pointer; transition:padding-left 0.2s;
+}
+.nav-item:hover { padding-left:8px; }
+.nav-item .lbl {
+  font-family:'Space Mono',monospace; font-size:10px;
+  letter-spacing:0.15em; text-transform:uppercase;
+}
+.nav-item .arr {
+  font-family:'Space Mono',monospace; font-size:10px; color:var(--grigio);
+}
+
+/* ── INNER PAGES ── */
+.page-header {
+  padding:80px 60px 60px;
+  border-bottom:1px solid var(--grigio-chiaro);
+  display:flex; justify-content:space-between; align-items:flex-end;
+}
+.page-header h2 {
+  font-size:clamp(36px,5vw,64px); font-weight:400;
+  line-height:0.95; letter-spacing:-0.02em;
+}
+.page-header h2 em { font-style:italic; color:var(--grigio); }
+.page-header .meta {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--grigio); text-align:right; line-height:2;
+}
+.container { max-width:900px; margin:0 auto; padding:0 60px; }
+.section { padding:60px 0; border-bottom:1px solid var(--grigio-chiaro); }
+.section:last-child { border-bottom:none; }
+.section-label {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.25em; text-transform:uppercase; color:var(--grigio);
+  margin-bottom:28px; display:flex; align-items:center; gap:16px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--grigio-chiaro); }
+h3 { font-size:26px; font-weight:400; letter-spacing:-0.01em; margin-bottom:16px; }
+p { color:var(--grigio-medio); margin-bottom:16px; }
+
+/* ── PROJECTS LIST ── */
+.projects-list { display:flex; flex-direction:column; }
+.project-row {
+  display:grid; grid-template-columns:80px 1fr 180px;
+  gap:40px; padding:32px 0;
+  border-bottom:1px solid var(--grigio-chiaro);
+  align-items:start; cursor:pointer; transition:padding-left 0.2s;
+}
+.project-row:hover { padding-left:12px; }
+.project-row:last-child { border-bottom:none; }
+.project-year {
+  font-family:'Space Mono',monospace; font-size:10px;
+  letter-spacing:0.1em; color:var(--grigio); padding-top:4px;
+}
+.project-name {
+  font-size:28px; font-weight:400; letter-spacing:-0.01em;
+  line-height:1.1; margin-bottom:8px;
+}
+.project-name em { font-style:italic; color:var(--grigio); }
+.project-desc { font-size:15px; color:var(--grigio-medio); line-height:1.6; }
+.project-meta { text-align:right; }
+.project-status {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:4px 10px; display:inline-block; margin-bottom:8px;
+}
+.status-active { background:var(--nero); color:var(--bianco); }
+.status-upcoming { border:1px solid var(--grigio-chiaro); color:var(--grigio); }
+.project-locs {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.1em; color:var(--grigio); line-height:2;
+}
+
+/* ── STILL RUNNING ── */
+.sr-statement {
+  font-size:19px; line-height:1.65; color:var(--grigio-medio);
+  font-style:italic; border-left:2px solid var(--nero);
+  padding:20px 32px; margin-bottom:40px;
+}
+.corpus-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:2px;
+  background:var(--grigio-chiaro); margin:32px 0;
+}
+.corpus-cell {
+  background:var(--bianco); aspect-ratio:1;
+  position:relative; overflow:hidden;
+}
+.corpus-cell .img-placeholder {
+  width:100%; height:100%; background:#e8e5de;
+  display:flex; align-items:center; justify-content:center;
+}
+.corpus-cell .overlay {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(transparent, rgba(8,8,8,0.75));
+  padding:20px 16px 14px; opacity:0; transition:opacity 0.25s;
+}
+.corpus-cell:hover .overlay { opacity:1; }
+.overlay-code {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; color:rgba(244,242,237,0.6); text-transform:uppercase;
+}
+.overlay-title {
+  font-family:'EB Garamond',serif; font-style:italic;
+  font-size:14px; color:var(--bianco); line-height:1.4;
+}
+
+/* PRINTS */
+.prints-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:32px; margin:32px 0; }
+.print-item { border-top:1px solid var(--nero); padding-top:16px; }
+.print-code {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--grigio); margin-bottom:8px;
+}
+.print-title { font-style:italic; font-size:16px; margin-bottom:12px; line-height:1.4; }
+.print-img { aspect-ratio:4/5; background:#e0ddd6; margin-bottom:14px; overflow:hidden; }
+.print-img img { width:100%; height:100%; object-fit:cover; display:block; }
+.print-sizes {
+  font-family:'Space Mono',monospace; font-size:10px; line-height:2; color:var(--grigio-medio);
+}
+.print-sizes span {
+  display:block; border-bottom:1px solid var(--grigio-chiaro); padding:4px 0;
+}
+.print-sizes span:last-child { border-bottom:none; }
+.print-avail {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.1em; text-transform:uppercase; margin-top:10px;
+  color:var(--grigio);
+}
+.print-avail.open { color:var(--verde); }
+
+/* FANZINE */
+.detail-row {
+  display:flex; justify-content:space-between;
+  padding:10px 0; border-bottom:1px solid var(--grigio-chiaro);
+  font-size:15px;
+}
+.detail-row:last-child { border-bottom:none; }
+.detail-label {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--grigio); padding-top:2px;
+}
+
+/* NOTE BOX */
+.note-box {
+  background:#ede9e0; border-top:2px solid var(--nero);
+  padding:20px 28px; margin:24px 0; font-size:15px; color:var(--grigio-medio);
+}
+.note-box strong {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase;
+  display:block; margin-bottom:8px; color:var(--nero);
+}
+
+/* ── WORKSHOP ── */
+.ws-hero { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+.ws-hero-img {
+  aspect-ratio:4/3; background:#111; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.ws-hero-text {
+  padding:48px; border-left:1px solid var(--grigio-chiaro);
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.ws-tag {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase; color:var(--grigio); margin-bottom:16px;
+}
+.ws-title {
+  font-size:26px; font-weight:400; letter-spacing:-0.01em;
+  line-height:1.2; margin-bottom:16px;
+}
+.ws-desc { font-size:15px; color:var(--grigio-medio); line-height:1.7; font-style:italic; }
+.ws-details { border-top:1px solid var(--grigio-chiaro); padding-top:20px; margin-top:20px; }
+.programme-table { width:100%; border-collapse:collapse; margin:24px 0; }
+.programme-table th {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase; color:var(--grigio);
+  text-align:left; padding:8px 0; border-bottom:1px solid var(--nero);
+}
+.programme-table td {
+  padding:14px 0; border-bottom:1px solid var(--grigio-chiaro);
+  font-size:15px; vertical-align:top;
+}
+.programme-table td:first-child {
+  font-family:'Space Mono',monospace; font-size:10px;
+  font-weight:700; white-space:nowrap; padding-right:32px; color:var(--grigio);
+}
+
+/* ── NEWSLETTER ── */
+.nl-statement {
+  font-size:21px; line-height:1.6; font-style:italic;
+  color:var(--grigio-medio); max-width:600px; margin-bottom:48px;
+}
+.form-row {
+  display:flex; border:1px solid var(--nero); max-width:440px; margin-bottom:12px;
+}
+.form-row input {
+  flex:1; border:none; background:transparent; padding:14px 20px;
+  font-family:'EB Garamond',serif; font-size:16px; color:var(--nero); outline:none;
+}
+.form-row input::placeholder { color:var(--grigio-chiaro); }
+.form-row button {
+  background:var(--nero); color:var(--bianco); border:none;
+  padding:14px 28px; font-family:'Space Mono',monospace;
+  font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
+  cursor:pointer; white-space:nowrap; transition:background 0.2s;
+}
+.form-row button:hover { background:var(--grigio-medio); }
+.form-note {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.1em; color:var(--grigio); line-height:1.8; max-width:440px;
+}
+.form-success {
+  display:none; background:var(--nero); color:var(--bianco);
+  padding:20px 28px; max-width:440px;
+  font-family:'Space Mono',monospace; font-size:10px;
+  letter-spacing:0.15em; line-height:1.8;
+}
+.archive-item {
+  display:grid; grid-template-columns:80px 1fr 100px;
+  gap:32px; padding:18px 0;
+  border-bottom:1px solid var(--grigio-chiaro); align-items:baseline;
+}
+.archive-item:last-child { border-bottom:none; }
+.archive-issue {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--grigio);
+}
+.archive-title { font-style:italic; font-size:16px; }
+.archive-date {
+  font-family:'Space Mono',monospace; font-size:9px; color:var(--grigio); text-align:right;
+}
+
+/* ── ABOUT ── */
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; padding:60px 0; }
+.about-text p { font-size:17px; line-height:1.8; color:var(--grigio-medio); margin-bottom:20px; }
+.about-detail-label {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase; color:var(--grigio);
+  margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--grigio-chiaro);
+}
+.about-list { list-style:none; margin-bottom:36px; }
+.about-list li {
+  padding:8px 0; border-bottom:1px solid var(--grigio-chiaro);
+  font-size:15px; color:var(--grigio-medio);
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.about-list li:last-child { border-bottom:none; }
+.about-list li span {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.1em; color:var(--grigio-chiaro); text-transform:uppercase;
+}
+
+/* SHARED */
+.btn {
+  display:inline-block; font-family:'Space Mono',monospace;
+  font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
+  padding:12px 28px; cursor:pointer; transition:all 0.2s;
+  text-decoration:none; border:none;
+}
+.btn-primary { background:var(--nero); color:var(--bianco); }
+.btn-primary:hover { background:var(--grigio-medio); }
+.btn-outline { border:1px solid var(--nero); color:var(--nero); background:transparent; }
+.btn-outline:hover { background:var(--nero); color:var(--bianco); }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; }
+
+/* FOOTER */
+footer {
+  border-top:1px solid var(--nero); padding:32px 60px;
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:80px;
+}
+footer .fl {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--grigio);
+}
+footer .fr { display:flex; gap:32px; }
+footer .fr a {
+  font-family:'Space Mono',monospace; font-size:9px;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--grigio);
+  text-decoration:none; cursor:pointer; transition:color 0.2s;
+}
+footer .fr a:hover { color:var(--nero); }
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav { padding:0 24px; }
+  .nav-links { gap:20px; }
+  #page-home .hero { grid-template-columns:1fr; }
+  #page-home .hero-image { aspect-ratio:4/3; height:auto; }
+  #page-home .hero-text { padding:40px 24px; border-left:none; border-top:1px solid var(--nero); }
+  .page-header { padding:48px 24px 40px; flex-direction:column; gap:16px; align-items:flex-start; }
+  .container { padding:0 24px; }
+  .corpus-grid { grid-template-columns:1fr; }
+  .prints-grid { grid-template-columns:1fr; }
+  .ws-hero { grid-template-columns:1fr; }
+  .ws-hero-text { border-left:none; border-top:1px solid var(--grigio-chiaro); padding:32px 24px; }
+  .about-grid { grid-template-columns:1fr; gap:40px; }
+  .project-row { grid-template-columns:1fr; gap:8px; }
+  .archive-item { grid-template-columns:60px 1fr; }
+  .archive-date { display:none; }
+  footer { padding:24px; flex-direction:column; gap:16px; text-align:center; }
+  .two-col { grid-template-columns:1fr; gap:32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" onclick="show('home')">raw.traces</a>
+  <ul class="nav-links">
+    <li><a onclick="show('projects')" id="nav-projects">Projects</a></li>
+    <li><a onclick="show('workshop')" id="nav-workshop">Workshop</a></li>
+    <li><a onclick="show('newsletter')" id="nav-newsletter">Newsletter</a></li>
+    <li><a onclick="show('about')" id="nav-about">About</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div id="page-home" class="page visible">
+  <div class="hero">
+    <div class="hero-image">
+      <div class="placeholder">
+        <!-- Replace with: <img src="sr001.jpeg" alt=""> -->
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="0.75">
+          <rect x="3" y="3" width="18" height="18" rx="1"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+      </div>
+    </div>
+    <div class="hero-text">
+
+      <h1>raw<br><em>traces</em></h1>
+      <div class="hero-footer">
+        <div class="nav-items">
+          <div class="nav-item" onclick="show('still-running')">
+            <span class="lbl">Still Running — 2026</span>
+            <span class="arr">→</span>
+          </div>
+          <div class="nav-item" onclick="show('workshop')">
+            <span class="lbl">Workshop · Jan 2027</span>
+            <span class="arr">→</span>
+          </div>
+          <div class="nav-item" onclick="show('newsletter')">
+            <span class="lbl">Newsletter</span>
+            <span class="arr">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="fl">raw.traces © 2026</div>
+    <div class="fr">
+      <a href="https://instagram.com/rawtraces" target="_blank">Instagram</a>
+      <a onclick="show('newsletter')">Newsletter</a>
+      <a onclick="show('about')">About</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ PROJECTS ══ -->
+<div id="page-projects" class="page">
+  <div class="page-header">
+    <h2>Projects</h2>
+    <div class="meta">raw.traces<br>All work</div>
+  </div>
+  <div class="container">
+    <div class="section">
+      <div class="projects-list">
+        <div class="project-row" onclick="show('still-running')">
+          <div class="project-year">2026</div>
+          <div>
+            <div class="project-name">Still <em>Running</em></div>
+            <div class="project-desc">Visual investigation of built systems — financial, industrial, urban, historical — captured in the moments when they contradict themselves. Milan, Pontremoli, Berlin.</div>
+          </div>
+          <div class="project-meta">
+            <div><span class="project-status status-active">In progress</span></div>
+            <div class="project-locs">Milan<br>Pontremoli<br>Berlin</div>
+          </div>
+        </div>
+        <div class="project-row" style="opacity:0.35; pointer-events:none;">
+          <div class="project-year">2027</div>
+          <div>
+            <div class="project-name"><em>—</em></div>
+            <div class="project-desc">Next project. Not yet named.</div>
+          </div>
+          <div class="project-meta">
+            <span class="project-status status-upcoming">Upcoming</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="fl">raw.traces © 2026</div>
+    <div class="fr">
+      <a href="https://instagram.com/rawtraces" target="_blank">Instagram</a>
+      <a onclick="show('newsletter')">Newsletter</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ STILL RUNNING ══ -->
+<div id="page-still-running" class="page">
+  <div class="page-header">
+    <h2>Still <em>Running</em></h2>
+    <div class="meta">2026<br>Milan · Pontremoli · Berlin</div>
+  </div>
+  <div class="container">
+
+    <div class="section">
+      <p class="sr-statement">Still Running is a visual investigation of built systems — financial, industrial, urban, historical — captured in the moments when they contradict themselves. The machine keeps running. The script has paused.</p>
+      <p style="color:var(--grigio);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;">Leica M10M + Leica MP · Ilford HP5 · May–November 2026 · Fanzine and fine art prints, autumn.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Selected frames</div>
+      <div class="corpus-grid">
+        <div class="corpus-cell">
+          <div class="img-placeholder">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="0.75"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="overlay">
+            <div class="overlay-code">SR-001</div>
+            <div class="overlay-title">Perforated panel</div>
+          </div>
+        </div>
+        <div class="corpus-cell">
+          <div class="img-placeholder">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="0.75"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="overlay">
+            <div class="overlay-code">SR-003</div>
+            <div class="overlay-title">CityLife through the tear</div>
+          </div>
+        </div>
+        <div class="corpus-cell">
+          <div class="img-placeholder">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="0.75"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="overlay">
+            <div class="overlay-code">SR-006</div>
+            <div class="overlay-title">Four towers, one figure</div>
+          </div>
+        </div>
+        <div class="corpus-cell">
+          <div class="img-placeholder">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="0.75"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="overlay">
+            <div class="overlay-code">SR-008</div>
+            <div class="overlay-title">Four towers, hillside</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Fine art prints</div>
+      <p style="color:var(--grigio-medio);margin-bottom:32px;font-size:15px;">10 prints per image · Numbered and signed · Hahnemühle Photo Rag Baryta 315gsm (film) · Photo Rag Ultra Smooth 305gsm (digital) · Certificate of authenticity included.</p>
+      <div class="prints-grid">
+        <div class="print-item">
+          <div class="print-code">SR-001</div>
+          <div class="print-title">Perforated panel, Milan</div>
+          <div class="print-img"></div>
+          <div class="print-sizes">
+            <span>30×40 cm — €180</span>
+            <span>50×70 cm — €320</span>
+          </div>
+          <div class="print-avail">Available November 2026</div>
+        </div>
+        <div class="print-item">
+          <div class="print-code">SR-008</div>
+          <div class="print-title">Four towers, Milan</div>
+          <div class="print-img"></div>
+          <div class="print-sizes">
+            <span>30×40 cm — €180</span>
+            <span>50×70 cm — €320</span>
+          </div>
+          <div class="print-avail">Available November 2026</div>
+        </div>
+        <div class="print-item">
+          <div class="print-code">SR-012</div>
+          <div class="print-title">Berlin — TBD</div>
+          <div class="print-img"></div>
+          <div class="print-sizes">
+            <span>30×40 cm — €180</span>
+            <span>50×70 cm — €320</span>
+          </div>
+          <div class="print-avail">Available November 2026</div>
+        </div>
+      </div>
+      <div class="note-box">
+        <strong>Waitlist</strong>
+        Prints launch November 2026. Subscribe to the newsletter — waitlist members have 48-hour priority access before public sale.
+      </div>
+      <a class="btn btn-primary" onclick="show('newsletter')">Join the waitlist →</a>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Fanzine</div>
+      <div class="two-col">
+        <div>
+          <p style="font-size:21px;font-style:italic;color:var(--grigio-medio);line-height:1.6;margin-bottom:20px;">Still Running, Vol. I<br>Milan · Pontremoli · Berlin, 2026</p>
+          <p style="font-size:15px;color:var(--grigio-medio);line-height:1.7;">50 copies, numbered. Risograph or offset. 12–14 images, sequenced. European shipping included.</p>
+        </div>
+        <div>
+          <div class="detail-row"><span class="detail-label">Edition</span><span>50 copies, numbered</span></div>
+          <div class="detail-row"><span class="detail-label">Price</span><span>€35–45 incl. EU shipping</span></div>
+          <div class="detail-row"><span class="detail-label">Print</span><span>Risograph or offset</span></div>
+          <div class="detail-row"><span class="detail-label">Ship date</span><span>November 2026</span></div>
+          <div class="detail-row"><span class="detail-label">Waitlist</span><span style="color:var(--verde);font-family:'Space Mono',monospace;font-size:10px;">Open — newsletter</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <div class="fl">raw.traces © 2026</div>
+    <div class="fr">
+      <a href="https://instagram.com/rawtraces" target="_blank">Instagram</a>
+      <a onclick="show('newsletter')">Newsletter</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ WORKSHOP ══ -->
+<div id="page-workshop" class="page">
+  <div class="page-header">
+    <h2>Workshop</h2>
+    <div class="meta">raw.traces<br>January 2027</div>
+  </div>
+  <div class="container">
+
+    <div class="section">
+      <div class="ws-hero">
+        <div class="ws-hero-img">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="0.75"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="ws-hero-text">
+          <div>
+            <div class="ws-tag">Raw Traces Milano — January 2027</div>
+            <div class="ws-title">A day in the industrial and financial periphery of Milan</div>
+            <div class="ws-desc">Working in the margins of official time. One full day, four participants, two locations. The method of Still Running applied to your own practice.</div>
+          </div>
+          <div class="ws-details">
+            <div class="detail-row"><span class="detail-label">Date</span><span>January 2027 — TBD</span></div>
+            <div class="detail-row"><span class="detail-label">Participants</span><span>Maximum 4</span></div>
+            <div class="detail-row"><span class="detail-label">Price</span><span>€450–550</span></div>
+            <div class="detail-row"><span class="detail-label">Language</span><span>Italian / English</span></div>
+            <div class="detail-row"><span class="detail-label">Equipment</span><span>Any camera. Film preferred, not required.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Programme</div>
+      <table class="programme-table">
+        <thead><tr><th>Time</th><th>Session</th></tr></thead>
+        <tbody>
+          <tr><td>09:30</td><td>CityLife / Portello — corporate landscape and its margins. Working method: slow approach, reading a space before shooting it.</td></tr>
+          <tr><td>13:00</td><td>Technical lunch — photobook sequencing. Bring 10 prints. We discuss order, not quality.</td></tr>
+          <tr><td>14:30</td><td>Bovisa / Quarto Oggiaro — industrial and residential periphery. Post-production discussion: from negative to print.</td></tr>
+          <tr><td>17:30</td><td>End. No group editing session — that work is yours alone.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Reserve a place</div>
+      <p style="font-size:18px;font-style:italic;color:var(--grigio-medio);margin-bottom:32px;max-width:520px;line-height:1.7;">January 2027. Booking via the form below — confirmed by email within 48 hours.</p>
+      <form onsubmit="handleBooking(event)" style="max-width:440px;">
+        <div class="form-row" style="margin-bottom:12px;">
+          <input type="text" placeholder="Name" required id="b-name">
+        </div>
+        <div class="form-row" style="margin-bottom:12px;">
+          <input type="email" placeholder="Email" required id="b-email">
+        </div>
+        <div class="form-row">
+          <input type="text" placeholder="Camera / film or digital" id="b-camera">
+          <button type="submit">Book →</button>
+        </div>
+        <p class="form-note" style="margin-top:12px;">Booking request only. Confirmed by email. Payment on confirmation. Full refund up to 14 days before the date.</p>
+      </form>
+      <div id="b-success" class="form-success" style="margin-top:16px;">
+        Request received. You will hear within 48 hours.<br>— raw.traces
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <div class="fl">raw.traces © 2026</div>
+    <div class="fr">
+      <a href="https://instagram.com/rawtraces" target="_blank">Instagram</a>
+      <a onclick="show('newsletter')">Newsletter</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ NEWSLETTER ══ -->
+<div id="page-newsletter" class="page">
+  <div class="page-header">
+    <h2>Newsletter</h2>
+    <div class="meta">raw.traces<br>Monthly · Free</div>
+  </div>
+  <div class="container">
+
+    <div class="section">
+      <p class="nl-statement">One image. One paragraph on the thinking. One reference. Monthly, when there is something worth saying.</p>
+      <div class="newsletter-form">
+        <form onsubmit="handleNL(event)">
+          <div class="form-row">
+            <input type="email" placeholder="Your email" required id="nl-email">
+            <button type="submit">Subscribe</button>
+          </div>
+          <p class="form-note">No algorithm. No sponsored content. Prints and fanzine waitlist — subscribers notified 48 hours before public sale.</p>
+        </form>
+        <div id="nl-success" class="form-success" style="margin-top:16px;">
+          Subscribed. First letter when there is something worth saying.<br>— raw.traces
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Archive</div>
+      <div>
+        <div class="archive-item">
+          <div class="archive-issue">No. 001</div>
+          <div>
+            <div class="archive-title">Before anything else, a panel</div>
+            <div style="font-size:14px;color:var(--grigio);margin-top:4px;">SR-001 · Perforated metal, Milan · On Basilico's discipline</div>
+          </div>
+          <div class="archive-date">May 2026</div>
+        </div>
+        <div class="archive-item" style="opacity:0.4;">
+          <div class="archive-issue">No. 002</div>
+          <div>
+            <div class="archive-title">Before the traders arrive</div>
+            <div style="font-size:14px;color:var(--grigio);margin-top:4px;">SR-003 · CityLife · Coming June</div>
+          </div>
+          <div class="archive-date">June 2026</div>
+        </div>
+        <div class="archive-item" style="opacity:0.25;">
+          <div class="archive-issue">No. 003</div>
+          <div><div class="archive-title">—</div></div>
+          <div class="archive-date">June 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">What this is</div>
+      <div style="max-width:560px;">
+        <p>Not a blog. Not a tutorial. One image from the current project, placed in the thinking. One reference — a photographer, a book, a sentence that matters to the work.</p>
+        <p>Three paragraphs maximum. Never more.</p>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <div class="fl">raw.traces © 2026</div>
+    <div class="fr">
+      <a href="https://instagram.com/rawtraces" target="_blank">Instagram</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div id="page-about" class="page">
+  <div class="page-header">
+    <h2>About</h2>
+    <div class="meta">raw.traces<br>Milano</div>
+  </div>
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Photographer. Based in Milan.</p>
+      </div>
+      <div class="about-details">
+        <div class="about-detail-label">Equipment</div>
+        <ul class="about-list">
+          <li>Leica M10M <span>Digital</span></li>
+          <li>Leica M9 <span>Digital</span></li>
+          <li>Leica MP <span>Film</span></li>
+          <li>Film — developed, scanned and printed by hand at home <span>Artisanal</span></li>
+          <li>Epson P600 · Hahnemühle <span>Print</span></li>
+        </ul>
+        <div class="about-detail-label">Contact</div>
+        <ul class="about-list">
+          <li>Instagram <span><a href="https://instagram.com/rawtraces" target="_blank" style="color:var(--grigio);text-decoration:none;">@rawtraces</a></span></li>
+          <li style="cursor:pointer;" onclick="show('newsletter')">Newsletter <span style="color:var(--grigio);">Subscribe</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="fl">raw.traces © 2026</div>
+    <div class="fr">
+      <a href="https://instagram.com/rawtraces" target="_blank">Instagram</a>
+      <a onclick="show('newsletter')">Newsletter</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+const pages = ['home','projects','still-running','workshop','newsletter','about'];
+const navMap = {
+  'projects':'nav-projects','still-running':'nav-projects',
+  'workshop':'nav-workshop','newsletter':'nav-newsletter','about':'nav-about'
+};
+function show(id) {
+  pages.forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if(el) el.classList.remove('visible');
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const t = document.getElementById('page-'+id);
+  if(t){ t.classList.add('visible'); window.scrollTo(0,0); }
+  const n = navMap[id];
+  if(n){ const el = document.getElementById(n); if(el) el.classList.add('active'); }
+}
+function handleNL(e){
+  e.preventDefault();
+  document.querySelector('#page-newsletter form').style.display='none';
+  document.getElementById('nl-success').style.display='block';
+}
+function handleBooking(e){
+  e.preventDefault();
+  document.querySelector('#page-workshop form').style.display='none';
+  document.getElementById('b-success').style.display='block';
+}
+</script>
+</body>
+</html>
