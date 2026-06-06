@@ -7,14 +7,19 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="raw.traces">
 <meta name="theme-color" content="#080808">
-<title>raw.traces — Calendario</title>
+<title>raw.traces — Calendario v2</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&display=swap');
 :root {
   --nero:#080808;--bianco:#f4f2ed;--grigio:#7a7a7a;--gc:#ccc9c2;--gm:#444;
-  --feed:#1a1a17;--feed-t:#e8e4dc;--reel:#1c3a10;--reel-t:#c8e8a0;
-  --nl:#3a2005;--nl-t:#f5d4a0;--story:#0c2a4a;--story-t:#cce3f8;
-  --studio:#2a1a40;--studio-t:#d8c8f8;--oggi:#b83232;--oggi-t:#fff0f0;
+  --feed:#1a1a17;--feed-t:#e8e4dc;
+  --reel:#1c3a10;--reel-t:#c8e8a0;
+  --nl:#3a2005;--nl-t:#f5d4a0;
+  --story:#0c2a4a;--story-t:#cce3f8;
+  --studio:#2a1a40;--studio-t:#d8c8f8;
+  --scatto:#003a4a;--scatto-t:#b0e0f0;
+  --oggi:#b83232;--oggi-t:#fff0f0;
+  --filone:#3a003a;--filone-t:#f0c8f0;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -30,9 +35,14 @@ body{background:var(--bianco);color:var(--nero);font-family:'EB Garamond',serif;
 .nav-btn.active{color:var(--nero);background:var(--bianco);border-color:var(--bianco)}
 .legenda{padding:10px 20px;background:#ece9e2;border-bottom:1px solid var(--gc);display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.06em;text-transform:uppercase;padding:3px 7px;border-radius:2px;white-space:nowrap}
-.t-feed{background:var(--feed);color:var(--feed-t)}.t-reel{background:var(--reel);color:var(--reel-t)}
-.t-nl{background:var(--nl);color:var(--nl-t)}.t-story{background:var(--story);color:var(--story-t)}
-.t-studio{background:var(--studio);color:var(--studio-t)}.t-oggi{background:var(--oggi);color:var(--oggi-t)}
+.t-feed{background:var(--feed);color:var(--feed-t)}
+.t-reel{background:var(--reel);color:var(--reel-t)}
+.t-nl{background:var(--nl);color:var(--nl-t)}
+.t-story{background:var(--story);color:var(--story-t)}
+.t-studio{background:var(--studio);color:var(--studio-t)}
+.t-scatto{background:var(--scatto);color:var(--scatto-t)}
+.t-filone{background:var(--filone);color:var(--filone-t)}
+.t-oggi{background:var(--oggi);color:var(--oggi-t)}
 .contenuto{padding:0 0 80px}
 .mese-block{scroll-margin-top:128px}
 .mese-header{display:flex;align-items:baseline;gap:10px;padding:28px 20px 10px;border-bottom:2px solid var(--nero);position:sticky;top:128px;background:var(--bianco);z-index:50}
@@ -50,12 +60,11 @@ body{background:var(--bianco);color:var(--nero);font-family:'EB Garamond',serif;
 .gn{font-family:'Space Mono',monospace;font-size:10px;color:var(--grigio);display:block;margin-bottom:3px}
 .cg.oc .gn{color:var(--oggi);font-weight:700}
 .cg.he .gn{color:var(--nero)}
-.dot{display:inline-block;width:5px;height:5px;background:var(--oggi);border-radius:50%;margin-left:3px;vertical-align:middle}
 .ep{display:flex;flex-direction:column;gap:2px}
 .pill{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:0.04em;text-transform:uppercase;padding:2px 4px;border-radius:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .detail-wrap{padding:0 20px}
 .dm{border:1px solid var(--gc);border-top:none}
-.er{display:grid;grid-template-columns:58px 64px 1fr;border-bottom:1px solid var(--gc)}
+.er{display:grid;grid-template-columns:58px 72px 1fr;border-bottom:1px solid var(--gc)}
 .er:last-child{border-bottom:none}
 .er:hover{background:#f7f5f0}
 .ed{font-family:'Space Mono',monospace;font-size:9px;color:var(--grigio);padding:11px 8px;border-right:1px solid var(--gc);line-height:1.3}
@@ -73,6 +82,9 @@ body{background:var(--bianco);color:var(--nero);font-family:'EB Garamond',serif;
 .ms-h{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#6b1a1a;margin-bottom:5px}
 .ms-t{font-size:13px;color:var(--gm);line-height:1.5}
 .ms-t strong{color:var(--nero)}
+.decisione{background:#fff8e8;border:1px solid #e8c840;border-top:none;padding:12px 14px}
+.dec-h{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#6b5000;margin-bottom:5px}
+.dec-t{font-size:13px;color:var(--gm);line-height:1.5}
 .sa{padding:36px 20px 20px;border-top:2px solid var(--nero);margin-top:36px}
 .at{font-size:52px;font-weight:400;letter-spacing:-0.03em;line-height:0.9;margin-bottom:5px}
 .at em{font-style:italic;color:var(--gc)}
@@ -90,293 +102,265 @@ body{background:var(--bianco);color:var(--nero);font-family:'EB Garamond',serif;
 <div class="header">
   <div class="header-top">
     <div class="logo">raw.<em>traces</em></div>
-    <div class="version">Cal · v9 · 2026–27</div>
+    <div class="version">Cal · v2 · Giu 2026</div>
   </div>
   <nav class="nav-mesi">
-    <a href="#mag" class="nav-btn">Mag</a><a href="#giu" class="nav-btn">Giu</a><a href="#lug" class="nav-btn">Lug</a><a href="#ago" class="nav-btn">Ago</a><a href="#set" class="nav-btn">Set</a><a href="#ott" class="nav-btn">Ott</a><a href="#nov" class="nav-btn">Nov</a><a href="#y27" class="nav-btn">2027 →</a>
+    <a href="#mag" class="nav-btn">Mag ✓</a>
+    <a href="#giu" class="nav-btn active">Giu</a>
+    <a href="#lug" class="nav-btn">Lug</a>
+    <a href="#ago" class="nav-btn">Ago</a>
+    <a href="#set" class="nav-btn">Set</a>
+    <a href="#ott" class="nav-btn">Ott</a>
+    <a href="#nov" class="nav-btn">Nov</a>
+    <a href="#y27" class="nav-btn">2027 →</a>
   </nav>
 </div>
 <div class="legenda">
-  <span class="tag t-feed">Feed</span><span class="tag t-reel">Reel</span><span class="tag t-nl">Newsletter</span><span class="tag t-story">Story</span><span class="tag t-studio">Studio</span><span class="tag t-oggi">Oggi</span>
+  <span class="tag t-feed">Feed</span>
+  <span class="tag t-scatto">Scatto</span>
+  <span class="tag t-reel">Reel</span>
+  <span class="tag t-nl">Newsletter</span>
+  <span class="tag t-story">Story</span>
+  <span class="tag t-filone">Filone</span>
+  <span class="tag t-studio">Studio</span>
+  <span class="tag t-oggi">Oggi</span>
 </div>
 <div class="contenuto">
 
-<!-- MAGGIO: inizia Ven 1 -->
+<!-- MAGGIO — storico -->
 <div class="mese-block" id="mag">
-  <div class="mese-header"><div class="mese-nome">Maggio</div><div class="mese-anno">2026</div><div class="mese-tema">Lancio · SR-001</div></div>
+  <div class="mese-header"><div class="mese-nome">Maggio</div><div class="mese-anno">2026</div><div class="mese-tema">Lancio · SR-001 · completato</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
     <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
-    <div class="cg" data-date="2026-5-1"><span class="gn">1</span></div><div class="cg" data-date="2026-5-2"><span class="gn">2</span></div><div class="cg" data-date="2026-5-3"><span class="gn">3</span></div>
-    <div class="cg" data-date="2026-5-4"><span class="gn">4</span></div><div class="cg" data-date="2026-5-5"><span class="gn">5</span></div><div class="cg" data-date="2026-5-6"><span class="gn">6</span></div><div class="cg" data-date="2026-5-7"><span class="gn">7</span></div><div class="cg" data-date="2026-5-8"><span class="gn">8</span></div><div class="cg" data-date="2026-5-9"><span class="gn">9</span></div><div class="cg" data-date="2026-5-10"><span class="gn">10</span></div>
-    <div class="cg" data-date="2026-5-11"><span class="gn">11</span></div><div class="cg" data-date="2026-5-12"><span class="gn">12</span></div><div class="cg" data-date="2026-5-13"><span class="gn">13</span></div><div class="cg" data-date="2026-5-14"><span class="gn">14</span></div><div class="cg" data-date="2026-5-15"><span class="gn">15</span></div><div class="cg" data-date="2026-5-16"><span class="gn">16</span></div><div class="cg" data-date="2026-5-17"><span class="gn">17</span></div>
-    <div class="cg" data-date="2026-5-18"><span class="gn">18</span></div><div class="cg" data-date="2026-5-19"><span class="gn">19</span></div><div class="cg" data-date="2026-5-20"><span class="gn">20</span></div><div class="cg" data-date="2026-5-21"><span class="gn">21</span></div><div class="cg" data-date="2026-5-22"><span class="gn">22</span></div><div class="cg" data-date="2026-5-23"><span class="gn">23</span></div><div class="cg" data-date="2026-5-24"><span class="gn">24</span></div>
-    <div class="cg" data-date="2026-5-25"><span class="gn">25</span></div><div class="cg" data-date="2026-5-26"><span class="gn">26</span></div><div class="cg" data-date="2026-5-27"><span class="gn">27</span></div><div class="cg" data-date="2026-5-28"><span class="gn">28</span></div><div class="cg" data-date="2026-5-29"><span class="gn">29</span></div><div class="cg" data-date="2026-5-30"><span class="gn">30</span></div>
-    <div class="cg he" data-date="2026-5-31"><span class="gn">31</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 001</span></div></div>
+    <div class="cg"><span class="gn">1</span></div><div class="cg"><span class="gn">2</span></div><div class="cg"><span class="gn">3</span></div>
+    <div class="cg"><span class="gn">4</span></div><div class="cg"><span class="gn">5</span></div><div class="cg"><span class="gn">6</span></div><div class="cg"><span class="gn">7</span></div><div class="cg"><span class="gn">8</span></div><div class="cg"><span class="gn">9</span></div><div class="cg"><span class="gn">10</span></div>
+    <div class="cg"><span class="gn">11</span></div><div class="cg"><span class="gn">12</span></div><div class="cg"><span class="gn">13</span></div><div class="cg"><span class="gn">14</span></div><div class="cg"><span class="gn">15</span></div><div class="cg"><span class="gn">16</span></div><div class="cg"><span class="gn">17</span></div>
+    <div class="cg"><span class="gn">18</span></div><div class="cg"><span class="gn">19</span></div><div class="cg"><span class="gn">20</span></div><div class="cg"><span class="gn">21</span></div><div class="cg"><span class="gn">22</span></div><div class="cg"><span class="gn">23</span></div><div class="cg"><span class="gn">24</span></div>
+    <div class="cg"><span class="gn">25</span></div><div class="cg"><span class="gn">26</span></div><div class="cg"><span class="gn">27</span></div><div class="cg"><span class="gn">28</span></div><div class="cg"><span class="gn">29</span></div><div class="cg"><span class="gn">30</span></div>
+    <div class="cg he"><span class="gn">31</span><div class="ep"><span class="pill t-feed">Feed ✓</span><span class="pill t-nl">NL 001 ✓</span></div></div>
   </div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er"><div class="ed">Dom 31</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-001</span> Pannello perforato</strong><br>Prima immagine. Nessuna spiegazione. <em>Digitale · bordo bianco</em></div></div>
-    <div class="er"><div class="ed">Dom 31</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 001 — "Before anything else, a panel."</strong><br>Rif. Basilico. Tre paragrafi.</div></div>
+    <div class="er"><div class="ed">Dom 31</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-001</span> Pannello perforato</strong> — Pubblicato. <em>Digitale · bordo bianco</em></div></div>
+    <div class="er"><div class="ed">Dom 31</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 001 — "Before anything else, a panel."</strong> Pubblicata.</div></div>
   </div></div>
 </div>
 
-<!-- GIUGNO: inizia Lun 1 -->
-<!-- L=1,2,3,4,5,6,7 / L=8,9,10,11,12,13,14 / L=15,16,17,18,19,20,21 / L=22,23,24,25,26,27,28 / L=29,30 -->
-<!-- 4=Gio(oggi), 7=Dom, 14=Dom, 18=Gio, 21=Dom, 28=Dom -->
+<!-- GIUGNO -->
 <div class="mese-block" id="giu">
-  <div class="mese-header"><div class="mese-nome">Giugno</div><div class="mese-anno">2026</div><div class="mese-tema">Stabilire il linguaggio</div></div>
+  <div class="mese-header"><div class="mese-nome">Giugno</div><div class="mese-anno">2026</div><div class="mese-tema">Filone emergente · produzione SR · Pontremoli</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
-    <div class="cg" data-date="2026-6-1"><span class="gn">1</span></div><div class="cg" data-date="2026-6-2"><span class="gn">2</span></div><div class="cg" data-date="2026-6-3"><span class="gn">3</span></div>
-    <div class="cg he" data-date="2026-6-4"><span class="gn">4</span></div>
-    <div class="cg" data-date="2026-6-5"><span class="gn">5</span></div><div class="cg" data-date="2026-6-6"><span class="gn">6</span></div>
-    <div class="cg he" data-date="2026-6-7"><span class="gn">7</span><div class="ep"><span class="pill t-reel">Reel</span><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-6-8"><span class="gn">8</span></div><div class="cg" data-date="2026-6-9"><span class="gn">9</span></div><div class="cg" data-date="2026-6-10"><span class="gn">10</span></div><div class="cg" data-date="2026-6-11"><span class="gn">11</span></div><div class="cg" data-date="2026-6-12"><span class="gn">12</span></div><div class="cg he" data-date="2026-6-13"><span class="gn">13</span><div class="ep"><span class="pill t-studio">Pontremoli</span></div></div>
-    <div class="cg he" data-date="2026-6-14"><span class="gn">14</span><div class="ep"><span class="pill t-studio">Pontremoli</span><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg he" data-date="2026-6-15"><span class="gn">15</span><div class="ep"><span class="pill t-studio">Pontremoli</span></div></div><div class="cg he" data-date="2026-6-16"><span class="gn">16</span><div class="ep"><span class="pill t-studio">Pontremoli</span></div></div><div class="cg he" data-date="2026-6-17"><span class="gn">17</span><div class="ep"><span class="pill t-studio">Pontremoli</span></div></div>
-    <div class="cg he" data-date="2026-6-18"><span class="gn">18</span><div class="ep"><span class="pill t-studio">Pontremoli</span><span class="pill t-reel">Reel</span></div></div>
-    <div class="cg he" data-date="2026-6-19"><span class="gn">19</span><div class="ep"><span class="pill t-studio">Pontremoli</span></div></div><div class="cg he" data-date="2026-6-20"><span class="gn">20</span><div class="ep"><span class="pill t-studio">Pontremoli</span></div></div>
-    <div class="cg he" data-date="2026-6-21"><span class="gn">21</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-6-22"><span class="gn">22</span></div><div class="cg" data-date="2026-6-23"><span class="gn">23</span></div><div class="cg" data-date="2026-6-24"><span class="gn">24</span></div><div class="cg" data-date="2026-6-25"><span class="gn">25</span></div><div class="cg" data-date="2026-6-26"><span class="gn">26</span></div><div class="cg" data-date="2026-6-27"><span class="gn">27</span></div>
-    <div class="cg he" data-date="2026-6-28"><span class="gn">28</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-reel">Reel</span></div></div>
-    <div class="cg" data-date="2026-6-29"><span class="gn">29</span></div><div class="cg" data-date="2026-6-30"><span class="gn">30</span></div>
-    <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
+    <div class="cg"><span class="gn">1</span></div><div class="cg"><span class="gn">2</span></div><div class="cg"><span class="gn">3</span></div><div class="cg"><span class="gn">4</span></div><div class="cg"><span class="gn">5</span></div><div class="cg"><span class="gn">6</span></div>
+    <div class="cg he oc"><span class="gn">7</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-filone">Filone</span></div></div>
+    <div class="cg he"><span class="gn">8</span><div class="ep"><span class="pill t-story">Story</span></div></div>
+    <div class="cg he"><span class="gn">9</span><div class="ep"><span class="pill t-scatto">Scatto</span></div></div>
+    <div class="cg"><span class="gn">10</span></div><div class="cg"><span class="gn">11</span></div><div class="cg"><span class="gn">12</span></div><div class="cg"><span class="gn">13</span></div>
+    <div class="cg he"><span class="gn">14</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">15</span></div><div class="cg"><span class="gn">16</span></div><div class="cg"><span class="gn">17</span></div><div class="cg"><span class="gn">18</span></div><div class="cg"><span class="gn">19</span></div><div class="cg"><span class="gn">20</span></div>
+    <div class="cg he"><span class="gn">21</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">22</span></div><div class="cg"><span class="gn">23</span></div><div class="cg he"><span class="gn">24</span><div class="ep"><span class="pill t-reel">Reel</span></div></div><div class="cg"><span class="gn">25</span></div><div class="cg"><span class="gn">26</span></div><div class="cg"><span class="gn">27</span></div>
+    <div class="cg he"><span class="gn">28</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">29</span></div><div class="cg"><span class="gn">30</span></div>
   </div></div>
-  <div class="nota-wrap"><div class="nota"><strong>v10 — ritmo produttivo reale:</strong> 1 scatto valido al mese. Pubblicare solo se il filtro regge — meglio slot vuoto che foto debole. Berlino 5–11 luglio è la variabile produttiva principale del 2026. Fanzine slittata a primavera 2027.</div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er" style="background:#fff8f8;" id="azioni-immediate"><div class="ed" style="color:var(--oggi);" id="oggi-label">Oggi</div><div class="et"><span class="tag t-oggi">Oggi</span></div><div class="ec"><strong>Azioni immediate</strong><br>Ordina Lamicall collo di cigno · Cartoncino nero A1 · Test luce sala mattino · iPhone: 4K 24fps</div></div>
-    <div class="er"><div class="ed">Dom 7</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>THE POUR — Reel 01</strong><br>Sviluppo HP5+. Audio live. <em>"HP5+. Rodinal 1+50. 20°C."</em></div></div>
-    <div class="er"><div class="ed">Dom 7</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Slot aperto</span><strong><span class="cod">SR-002</span> o SR-003 — da decidere</strong><br>SR-002 ha limiti compositivi su scansione. SR-003 ha logo CityLife troppo leggibile. Valutare entrambe prima di pubblicare. <em>Non pubblicare se nessuna regge il filtro.</em></div></div>
-    <div class="er"><div class="ed">Dom 14</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-003</span> CityLife attraverso il buco nella rete</strong><br><em>Digitale · IMG_2386.jpeg</em></div></div>
-    <div class="er"><div class="ed">Dom 14</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 002 — "Before the traders arrive."</strong><br>Rif. Atget.</div></div>
-    <div class="er"><div class="ed">Gio 18</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>THE NEGATIVE — Reel 02</strong><br>Negativo controluce, stacco su Lightroom.</div></div>
-    <div class="er"><div class="ed">Dom 21</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-004</span> Architettonico puro</strong><br>Sistema senza figure.</div></div>
-    <div class="er"><div class="ed">Dom 28</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-005</span> o Pontremoli</strong></div></div>
-    <div class="er"><div class="ed">Dom 28</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>THE PRINT — Reel 03</strong><br>Prima stampa Hahnemühle Baryta dalla P600.</div></div>
+    <div class="er"><div class="ed">Dom 7</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">D0002</span> Anziano in divisa — Orta</strong><br><em>The ceremony ended. The suit didn't. / Orta. 2026.</em><br>Filone emergente. Nessun codice corpus. Digitale M10M Nokton 50.</div></div>
+    <div class="er"><div class="ed">Lun 8</div><div class="et"><span class="tag t-story">Story</span></div><div class="ec">Dettaglio file Lightroom — faccia ritagliata stretta. Nessun testo, nessuna freccia al post.</div></div>
+    <div class="er"><div class="ed">Mar 9</div><div class="et"><span class="tag t-scatto">Scatto</span></div><div class="ec"><strong>SR-004 / SR-005</strong> — alba Milano. <span class="df">Priorità massima</span> Architettura pura senza figure. Deve uscire entro domenica 9 per avere materiale sviluppato e pubblicabile il 21. Se pellicola: sviluppare entro giovedì 12.</div></div>
+    <div class="er"><div class="ed">Dom 14</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-003</span> CityLife — buco nella rete</strong><br><span class="df">Solo se crop risolto</span> Altrimenti slitta al 21 e SR-004 slitta al 28. <em>Digitale</em></div></div>
+    <div class="er"><div class="ed">Dom 21</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-004</span></strong> — Architettura pura senza figure. <span class="df">Dipende da scatto 9/6</span> Se SR-003 non ha pubblicato il 14, questo slot va a SR-003. Se entrambe pronte: SR-003 il 14, SR-004 il 21.</div></div>
+    <div class="er"><div class="ed">Mer 24</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec">THE NEGATIVE o THE SCAN — materiale già disponibile. <em>No THE POUR: rimandato.</em></div></div>
+    <div class="er"><div class="ed">Dom 28</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">Uscita Pontremoli o filone emergente Milano. <span class="df">Pubblica solo se supera il filtro</span> Questo slot può essere SR-005 se prodotta, oppure scatto libero. Non è uno slot SR obbligatorio.</div></div>
   </div></div>
+  <div class="nota-wrap"><div class="nota"><strong>Dipendenza critica giugno:</strong> lo scatto del 9 giugno (SR-004/005) determina cosa si pubblica il 21 e il 28. Se l'uscita slitta o non produce materiale all'altezza, il 21 e il 28 vanno al filone emergente o restano vuoti. Non forzare la sequenza.</div></div>
 </div>
 
-<!-- LUGLIO: inizia Mer 1 -->
-<!-- L=6,M=7,M=8,G=9,V=10,S=11,D=12 / L=13..D=19 / L=20..D=26 / L=27..V=31 -->
-<!-- 5=Dom, 6=Lun, 12=Dom, 13=Lun, 17=Ven, 19=Dom, 20=Lun, 26=Dom -->
+<!-- LUGLIO -->
 <div class="mese-block" id="lug">
-  <div class="mese-header"><div class="mese-nome">Luglio</div><div class="mese-anno">2026</div><div class="mese-tema">Berlino 5–11 · Still Running</div></div>
+  <div class="mese-header"><div class="mese-nome">Luglio</div><div class="mese-anno">2026</div><div class="mese-tema">Berlino · SR-008 · Revisione filone</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
-    <div class="cg vuoto"></div><div class="cg vuoto"></div>
-    <div class="cg" data-date="2026-7-1"><span class="gn">1</span></div><div class="cg" data-date="2026-7-2"><span class="gn">2</span></div><div class="cg" data-date="2026-7-3"><span class="gn">3</span></div><div class="cg" data-date="2026-7-4"><span class="gn">4</span></div>
-    <div class="cg he" data-date="2026-7-5"><span class="gn">5</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg he" data-date="2026-7-6"><span class="gn">6</span><div class="ep"><span class="pill t-studio">Berlino</span></div></div>
-    <div class="cg he" data-date="2026-7-7"><span class="gn">7</span><div class="ep"><span class="pill t-studio">Berlino</span></div></div>
-    <div class="cg he" data-date="2026-7-8"><span class="gn">8</span><div class="ep"><span class="pill t-studio">Berlino</span></div></div>
-    <div class="cg he" data-date="2026-7-9"><span class="gn">9</span><div class="ep"><span class="pill t-studio">Berlino</span></div></div>
-    <div class="cg he" data-date="2026-7-10"><span class="gn">10</span><div class="ep"><span class="pill t-studio">Berlino</span></div></div>
-    <div class="cg he" data-date="2026-7-11"><span class="gn">11</span><div class="ep"><span class="pill t-studio">Berlino</span></div></div>
-    <div class="cg he" data-date="2026-7-12"><span class="gn">12</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-7-13"><span class="gn">13</span></div><div class="cg" data-date="2026-7-14"><span class="gn">14</span></div><div class="cg" data-date="2026-7-15"><span class="gn">15</span></div><div class="cg" data-date="2026-7-16"><span class="gn">16</span></div>
-    <div class="cg he" data-date="2026-7-17"><span class="gn">17</span><div class="ep"><span class="pill t-reel">Reel</span></div></div>
-    <div class="cg" data-date="2026-7-18"><span class="gn">18</span></div>
-    <div class="cg he" data-date="2026-7-19"><span class="gn">19</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 004</span></div></div>
-    <div class="cg" data-date="2026-7-20"><span class="gn">20</span></div><div class="cg" data-date="2026-7-21"><span class="gn">21</span></div><div class="cg" data-date="2026-7-22"><span class="gn">22</span></div><div class="cg" data-date="2026-7-23"><span class="gn">23</span></div><div class="cg" data-date="2026-7-24"><span class="gn">24</span></div><div class="cg" data-date="2026-7-25"><span class="gn">25</span></div>
-    <div class="cg he" data-date="2026-7-26"><span class="gn">26</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-7-27"><span class="gn">27</span></div><div class="cg" data-date="2026-7-28"><span class="gn">28</span></div><div class="cg" data-date="2026-7-29"><span class="gn">29</span></div><div class="cg" data-date="2026-7-30"><span class="gn">30</span></div><div class="cg" data-date="2026-7-31"><span class="gn">31</span></div>
-    <div class="cg vuoto"></div><div class="cg vuoto"></div>
+    <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg he"><span class="gn">1</span><div class="ep"><span class="pill t-scatto">Scatto</span></div></div><div class="cg"><span class="gn">2</span></div><div class="cg"><span class="gn">3</span></div><div class="cg"><span class="gn">4</span></div>
+    <div class="cg he"><span class="gn">5</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-studio">Decisione</span></div></div>
+    <div class="cg he"><span class="gn">6</span><div class="ep"><span class="pill t-story">Berlino</span></div></div>
+    <div class="cg he"><span class="gn">7</span><div class="ep"><span class="pill t-story">Berlino</span></div></div>
+    <div class="cg he"><span class="gn">8</span><div class="ep"><span class="pill t-story">Berlino</span></div></div>
+    <div class="cg he"><span class="gn">9</span><div class="ep"><span class="pill t-story">Berlino</span></div></div>
+    <div class="cg he"><span class="gn">10</span><div class="ep"><span class="pill t-story">Berlino</span></div></div>
+    <div class="cg"><span class="gn">11</span></div>
+    <div class="cg he"><span class="gn">12</span><div class="ep"><span class="pill t-story">Berlino ✈</span></div></div>
+    <div class="cg"><span class="gn">13</span></div><div class="cg"><span class="gn">14</span></div><div class="cg"><span class="gn">15</span></div><div class="cg"><span class="gn">16</span></div><div class="cg"><span class="gn">17</span></div><div class="cg"><span class="gn">18</span></div>
+    <div class="cg he"><span class="gn">19</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 004</span></div></div>
+    <div class="cg"><span class="gn">20</span></div><div class="cg"><span class="gn">21</span></div><div class="cg"><span class="gn">22</span></div><div class="cg"><span class="gn">23</span></div><div class="cg"><span class="gn">24</span></div><div class="cg"><span class="gn">25</span></div>
+    <div class="cg he"><span class="gn">26</span><div class="ep"><span class="pill t-filone">Filone</span></div></div>
+    <div class="cg"><span class="gn">27</span></div><div class="cg"><span class="gn">28</span></div><div class="cg"><span class="gn">29</span></div><div class="cg"><span class="gn">30</span></div><div class="cg"><span class="gn">31</span></div>
   </div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er"><div class="ed">Dom 5</div><div class="et"><span class="tag t-studio">Studio</span></div><div class="ec"><strong>Berlino — Check-in</strong><br>Mollstraße 31 · Friedrichshain. Scouting Karl-Marx-Allee a piedi. Nessuno scatto — orienta l'occhio.</div></div>
-    <div class="er"><div class="ed">6–10 Lug</div><div class="et"><span class="tag t-studio">Studio</span></div><div class="ec"><strong>Berlino operativo</strong><br>Karl-Marx-Allee · Tempelhof · Marzahn · Alexanderplatz. HP5 + Tri-X. M10M + MP. Sveglia 04:15 nei giorni di scatto. Check-out 11 luglio.</div></div>
-    <div class="er"><div class="ed">Dom 12</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-006</span> Torri CityLife, figura con cane</strong><br><em>Film · HP5 archivio</em></div></div>
-    <div class="er"><div class="ed">Ven 17</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>THE SCAN — Reel 04</strong><br>Negativo nello scanner. Lightroom a schermo leggibile.</div></div>
-    <div class="er"><div class="ed">Dom 19</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-008</span> Quattro torri</strong><br>La più forte del corpus. <em>Digitale · IMG_3932_polarr.jpeg</em></div></div>
-    <div class="er"><div class="ed">Dom 19</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 004 — "The system dwarfs the individual."</strong></div></div>
-    <div class="er"><div class="ed">Dom 26</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Slot aperto</span><strong>Scatto forte da archivio o post-Berlino</strong></div></div>
+    <div class="er"><div class="ed">1–5 Lug</div><div class="et"><span class="tag t-scatto">Scatto</span></div><div class="ec"><strong>SR-009 — Piazza Affari all'alba</strong> <span class="df">Priorità massima</span><br>L'immagine-tesi. Alba, piazza deserta, nessuna figura. Non slittare oltre luglio. Mer 1 luglio è la prima finestra utile prima di Berlino.</div></div>
+    <div class="er"><div class="ed">Dom 5</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">SR-004 se prodotto, altrimenti filone emergente. Non pubblicare il vuoto.</div></div>
+    <div class="er"><div class="ed">Dom 5</div><div class="et"><span class="tag t-studio">Decisione</span></div><div class="ec"><strong>Revisione filone emergente</strong> — guardare materiale accumulato (Orta + Pontremoli + uscite libere). Ha coerenza progettuale? Sì → nome e struttura provvisori. No → continua senza dichiarazione. Appuntamento editoriale reale.</div></div>
+    <div class="er"><div class="ed">5–11 Lug</div><div class="et"><span class="tag t-story">Story</span></div><div class="ec"><strong>Berlino</strong> — silenzio visivo. Nessuna caption, nessuna spiegazione. Stories di lavoro, non risultati finiti.</div></div>
+    <div class="er"><div class="ed">Dom 19</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-008</span> Quattro torri — figura sulla collina</strong><br>La più forte del corpus SR. Pubblicazione ritardata intenzionalmente per costruire attesa.</div></div>
+    <div class="er"><div class="ed">Dom 19</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 004 — "The system dwarfs the individual."</strong> Prima figura nel corpus SR.</div></div>
+    <div class="er"><div class="ed">Dom 26</div><div class="et"><span class="tag t-filone">Filone</span></div><div class="ec">Uscita libera post-Berlino. Filone emergente se disponibile materiale forte.</div></div>
   </div></div>
+  <div class="decisione"><div class="dec-h">⚑ Decisione obbligatoria — 5 luglio</div><div class="dec-t">Revisione filone emergente. Guardare tutto il materiale accumulato. Decidere: progetto formale (nome + struttura) o scatti dell'autore senza dichiarazione. Non è opzionale.</div></div>
 </div>
 
-<!-- AGOSTO: inizia Sab 1 -->
-<!-- V=1,S=2 / D=3 / L=4..D=9 / L=10..D=16 / L=17..D=23 / L=24..D=30 / L=31 -->
-<!-- 9=Dom, 10=Lun, 15=Sab, 16=Dom, 17=Lun, 23=Dom, 30=Dom, 31=Lun -->
+<!-- AGOSTO -->
 <div class="mese-block" id="ago">
-  <div class="mese-header"><div class="mese-nome">Agosto</div><div class="mese-anno">2026</div><div class="mese-tema">Città vuota · Basilico</div></div>
+  <div class="mese-header"><div class="mese-nome">Agosto</div><div class="mese-anno">2026</div><div class="mese-tema">Città vuota · Berlino debutta · Basilico</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
     <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
-    <div class="cg" data-date="2026-8-1"><span class="gn">1</span></div><div class="cg" data-date="2026-8-2"><span class="gn">2</span></div>
-    <div class="cg" data-date="2026-8-3"><span class="gn">3</span></div>
-    <div class="cg" data-date="2026-8-4"><span class="gn">4</span></div><div class="cg" data-date="2026-8-5"><span class="gn">5</span></div><div class="cg" data-date="2026-8-6"><span class="gn">6</span></div><div class="cg" data-date="2026-8-7"><span class="gn">7</span></div><div class="cg" data-date="2026-8-8"><span class="gn">8</span></div><div class="cg" data-date="2026-8-9"><span class="gn">9</span></div>
-    <div class="cg he" data-date="2026-8-10"><span class="gn">10</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 005</span></div></div>
-    <div class="cg" data-date="2026-8-11"><span class="gn">11</span></div><div class="cg" data-date="2026-8-12"><span class="gn">12</span></div><div class="cg" data-date="2026-8-13"><span class="gn">13</span></div><div class="cg" data-date="2026-8-14"><span class="gn">14</span></div>
-    <div class="cg he" data-date="2026-8-15"><span class="gn">15</span><div class="ep"><span class="pill t-reel">Reel</span></div></div>
-    <div class="cg he" data-date="2026-8-16"><span class="gn">16</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-8-17"><span class="gn">17</span></div><div class="cg" data-date="2026-8-18"><span class="gn">18</span></div><div class="cg" data-date="2026-8-19"><span class="gn">19</span></div><div class="cg" data-date="2026-8-20"><span class="gn">20</span></div><div class="cg" data-date="2026-8-21"><span class="gn">21</span></div><div class="cg" data-date="2026-8-22"><span class="gn">22</span></div>
-    <div class="cg he" data-date="2026-8-23"><span class="gn">23</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-8-24"><span class="gn">24</span></div><div class="cg" data-date="2026-8-25"><span class="gn">25</span></div><div class="cg" data-date="2026-8-26"><span class="gn">26</span></div><div class="cg" data-date="2026-8-27"><span class="gn">27</span></div><div class="cg" data-date="2026-8-28"><span class="gn">28</span></div><div class="cg" data-date="2026-8-29"><span class="gn">29</span></div>
-    <div class="cg he" data-date="2026-8-30"><span class="gn">30</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-8-31"><span class="gn">31</span></div>
+    <div class="cg"><span class="gn">1</span></div><div class="cg"><span class="gn">2</span></div>
+    <div class="cg he"><span class="gn">3</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">4</span></div><div class="cg"><span class="gn">5</span></div><div class="cg"><span class="gn">6</span></div><div class="cg"><span class="gn">7</span></div><div class="cg"><span class="gn">8</span></div><div class="cg"><span class="gn">9</span></div>
+    <div class="cg he"><span class="gn">10</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 005</span></div></div>
+    <div class="cg"><span class="gn">11</span></div><div class="cg"><span class="gn">12</span></div><div class="cg"><span class="gn">13</span></div><div class="cg he"><span class="gn">14</span><div class="ep"><span class="pill t-reel">Reel</span></div></div><div class="cg"><span class="gn">15</span></div>
+    <div class="cg he"><span class="gn">16</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-filone">Filone</span></div></div>
+    <div class="cg"><span class="gn">17</span></div><div class="cg"><span class="gn">18</span></div><div class="cg"><span class="gn">19</span></div><div class="cg"><span class="gn">20</span></div><div class="cg"><span class="gn">21</span></div><div class="cg"><span class="gn">22</span></div>
+    <div class="cg he"><span class="gn">23</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">24</span></div><div class="cg"><span class="gn">25</span></div><div class="cg"><span class="gn">26</span></div><div class="cg"><span class="gn">27</span></div><div class="cg"><span class="gn">28</span></div><div class="cg"><span class="gn">29</span></div>
+    <div class="cg he"><span class="gn">30</span><div class="ep"><span class="pill t-scatto">Scatto</span></div></div>
+    <div class="cg"><span class="gn">31</span></div>
   </div></div>
-  <div class="nota-wrap"><div class="nota"><strong>Agosto:</strong> 1 Reel max. Niente carousel. Il feed porta il progetto. Non inseguire la crescita — consolidala.</div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er"><div class="ed">Dom 9</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-009</span> Piazza Affari all'alba</strong><br>L'immagine-tesi. Scatta prima del 9 ago. <em>Film</em></div></div>
-    <div class="er"><div class="ed">Dom 9</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 005 — "The square belongs to no one."</strong></div></div>
-    <div class="er"><div class="ed">Sab 15</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>THE PRINT — agosto</strong><br>SR-009 sulla P600. Annuncia waitlist stampe.</div></div>
-    <div class="er"><div class="ed">Dom 16</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-010</span> Sistema industriale</strong></div></div>
-    <div class="er"><div class="ed">Dom 23</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-011</span> Ingresso istituzionale</strong><br><em>Film · sr011.jpg</em></div></div>
-    <div class="er"><div class="ed">Dom 30</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Slot aperto</span><strong>Scatto forte archivio o nuovo</strong></div></div>
+    <div class="er"><div class="ed">Dom 3</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">Miglior scatto Berlino (SR-012). <span class="df">Se non all'altezza: filone emergente</span> Non pubblicare il secondo migliore di Berlino per rispettare la data.</div></div>
+    <div class="er"><div class="ed">Dom 10</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-009</span> Piazza Affari</strong> <span class="df">Da produrre luglio</span> L'immagine-tesi del progetto.</div></div>
+    <div class="er"><div class="ed">Dom 10</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 005 — "The square belongs to no one."</strong></div></div>
+    <div class="er"><div class="ed">Ven 14</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec">THE PRINT — prima stampa Baryta dalla P600. Annuncia indirettamente le stampe in arrivo.</div></div>
+    <div class="er"><div class="ed">Dom 16</div><div class="et"><span class="tag t-filone">Filone</span></div><div class="ec">Uscita libera agosto. Città vuota — opportunità del mese.</div></div>
+    <div class="er"><div class="ed">Dom 23</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">Secondo scatto Berlino o slot filone emergente.</div></div>
+    <div class="er"><div class="ed">Dom 30</div><div class="et"><span class="tag t-scatto">Scatto</span></div><div class="ec">SR-015 — luce radente fine agosto su cemento o pietra. Preparazione serie autunnale.</div></div>
   </div></div>
+  <div class="nota-wrap"><div class="nota"><strong>Dipendenza critica agosto:</strong> torni da Berlino l'11 luglio. Per pubblicare il 3 agosto devi sviluppare i rullini entro il 20 luglio, scansionare e post-produrre entro il 27. Con pellicola HP5 è fattibile ma non lasciarlo all'ultimo. Se i rullini non sono pronti, il 3 agosto va al filone emergente senza rimpianti.</div></div>
+  <div class="nota-wrap"><div class="nota"><strong>Cambio agosto:</strong> 1 Reel massimo. Stories continuano. Il feed porta il progetto. Non inseguire la crescita — consolidala.</div></div>
 </div>
 
-<!-- SETTEMBRE: inizia Mar 1 -->
-<!-- L=7,M=8..D=13 / L=14..D=20 / L=21..D=27 / L=28,M=29,M=30 -->
-<!-- 6=Dom, 7=Lun, 13=Dom, 14=Lun, 19=Sab, 20=Dom, 27=Dom, 28=Lun -->
+<!-- SETTEMBRE -->
 <div class="mese-block" id="set">
-  <div class="mese-header"><div class="mese-nome">Settembre</div><div class="mese-anno">2026</div><div class="mese-tema">Debutto Berlino · stampe</div></div>
+  <div class="mese-header"><div class="mese-nome">Settembre</div><div class="mese-anno">2026</div><div class="mese-tema">Debutto Berlino · Close Friends · waitlist stampe</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
-    <div class="cg vuoto"></div>
-    <div class="cg" data-date="2026-9-1"><span class="gn">1</span></div><div class="cg" data-date="2026-9-2"><span class="gn">2</span></div><div class="cg" data-date="2026-9-3"><span class="gn">3</span></div><div class="cg" data-date="2026-9-4"><span class="gn">4</span></div><div class="cg" data-date="2026-9-5"><span class="gn">5</span></div>
-    <div class="cg he" data-date="2026-9-6"><span class="gn">6</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 006</span></div></div>
-    <div class="cg" data-date="2026-9-7"><span class="gn">7</span></div><div class="cg" data-date="2026-9-8"><span class="gn">8</span></div><div class="cg" data-date="2026-9-9"><span class="gn">9</span></div><div class="cg" data-date="2026-9-10"><span class="gn">10</span></div><div class="cg" data-date="2026-9-11"><span class="gn">11</span></div><div class="cg" data-date="2026-9-12"><span class="gn">12</span></div>
-    <div class="cg he" data-date="2026-9-13"><span class="gn">13</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-story">CF</span></div></div>
-    <div class="cg" data-date="2026-9-14"><span class="gn">14</span></div><div class="cg" data-date="2026-9-15"><span class="gn">15</span></div><div class="cg" data-date="2026-9-16"><span class="gn">16</span></div><div class="cg" data-date="2026-9-17"><span class="gn">17</span></div><div class="cg" data-date="2026-9-18"><span class="gn">18</span></div>
-    <div class="cg he" data-date="2026-9-19"><span class="gn">19</span><div class="ep"><span class="pill t-reel">Reel</span></div></div>
-    <div class="cg he" data-date="2026-9-20"><span class="gn">20</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-9-21"><span class="gn">21</span></div><div class="cg" data-date="2026-9-22"><span class="gn">22</span></div><div class="cg" data-date="2026-9-23"><span class="gn">23</span></div><div class="cg" data-date="2026-9-24"><span class="gn">24</span></div><div class="cg" data-date="2026-9-25"><span class="gn">25</span></div><div class="cg" data-date="2026-9-26"><span class="gn">26</span></div>
-    <div class="cg he" data-date="2026-9-27"><span class="gn">27</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-9-28"><span class="gn">28</span></div><div class="cg" data-date="2026-9-29"><span class="gn">29</span></div><div class="cg" data-date="2026-9-30"><span class="gn">30</span></div>
-    <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
+    <div class="cg"><span class="gn">1</span></div><div class="cg"><span class="gn">2</span></div><div class="cg"><span class="gn">3</span></div><div class="cg"><span class="gn">4</span></div><div class="cg"><span class="gn">5</span></div>
+    <div class="cg he"><span class="gn">6</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 006</span></div></div>
+    <div class="cg"><span class="gn">7</span></div><div class="cg"><span class="gn">8</span></div><div class="cg"><span class="gn">9</span></div><div class="cg"><span class="gn">10</span></div><div class="cg"><span class="gn">11</span></div><div class="cg he"><span class="gn">12</span><div class="ep"><span class="pill t-story">CF</span></div></div>
+    <div class="cg he"><span class="gn">13</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">14</span></div><div class="cg"><span class="gn">15</span></div><div class="cg"><span class="gn">16</span></div><div class="cg"><span class="gn">17</span></div><div class="cg he"><span class="gn">18</span><div class="ep"><span class="pill t-reel">Reel</span></div></div><div class="cg"><span class="gn">19</span></div>
+    <div class="cg he"><span class="gn">20</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">21</span></div><div class="cg"><span class="gn">22</span></div><div class="cg"><span class="gn">23</span></div><div class="cg"><span class="gn">24</span></div><div class="cg"><span class="gn">25</span></div><div class="cg"><span class="gn">26</span></div>
+    <div class="cg he"><span class="gn">27</span><div class="ep"><span class="pill t-filone">Filone</span></div></div>
+    <div class="cg"><span class="gn">28</span></div><div class="cg"><span class="gn">29</span></div><div class="cg"><span class="gn">30</span></div>
   </div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er"><div class="ed">Dom 6</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-012</span> Berlino debutto</strong><br>Migliore frame luglio.</div></div>
-    <div class="er"><div class="ed">Dom 6</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 006 — "A different weight."</strong><br>Berlino: ideologico vs finanziario.</div></div>
-    <div class="er"><div class="ed">Dom 13</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-013</span></strong> Da definire dopo scouting.</div></div>
-    <div class="er"><div class="ed">Dom 13</div><div class="et"><span class="tag t-story">Story</span></div><div class="ec"><strong>Attiva Close Friends · Apri waitlist stampe</strong><br>Nessun prezzo ancora. <em>"Coming November."</em></div></div>
-    <div class="er"><div class="ed">Sab 19</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>THE PRINT — Berlino su Baryta</strong><br>Caption annuncia waitlist esplicitamente.</div></div>
-    <div class="er"><div class="ed">Dom 20</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-013b</span> o scatto autunnale</strong></div></div>
-    <div class="er"><div class="ed">Dom 27</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-014</span> Pontile lago, coppia, barre</strong><br><em>Film · IMG_8506_polarr.jpeg</em></div></div>
+    <div class="er"><div class="ed">Dom 6</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong>Debutto Berlino ufficiale</strong> — miglior scatto non ancora pubblicato dal viaggio.</div></div>
+    <div class="er"><div class="ed">Dom 6</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 006 — "A different weight."</strong> Berlino: architettura ideologica vs. finanziaria.</div></div>
+    <div class="er"><div class="ed">Sab 12</div><div class="et"><span class="tag t-story">Story</span></div><div class="ec"><strong>Attiva Close Friends.</strong> Annuncia stampe in arrivo. Nessun prezzo ancora. Solo CF. Apri waitlist su rawtraces.com.</div></div>
+    <div class="er"><div class="ed">Dom 13</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">Slot filone emergente o terzo scatto Berlino.</div></div>
+    <div class="er"><div class="ed">Ven 18</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec">THE PRINT (settembre) — stampa Berlino su Baryta. Caption annuncia waitlist esplicitamente.</div></div>
+    <div class="er"><div class="ed">Dom 20</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-014</span> Pontile lago — coppia con barre</strong><br>FUNZIONANTE ma visivamente forte per il feed. <em>Digitale · barre verticali</em></div></div>
+    <div class="er"><div class="ed">Dom 27</div><div class="et"><span class="tag t-filone">Filone</span></div><div class="ec">Uscita libera settembre — filone emergente.</div></div>
   </div></div>
 </div>
 
-<!-- OTTOBRE: inizia Gio 1 -->
-<!-- V=3,S=4 / D=4 — aspetta: 1=Gio, 4=Dom, 5=Lun, 11=Dom, 12=Lun, 18=Dom, 19=Lun, 25=Dom, 26=Lun -->
+<!-- OTTOBRE -->
 <div class="mese-block" id="ott">
-  <div class="mese-header"><div class="mese-nome">Ottobre</div><div class="mese-anno">2026</div><div class="mese-tema">Autunno · fase commerciale</div></div>
+  <div class="mese-header"><div class="mese-nome">Ottobre</div><div class="mese-anno">2026</div><div class="mese-tema">Luce autunnale · workshop pilota · fase commerciale</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
     <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
-    <div class="cg" data-date="2026-10-1"><span class="gn">1</span></div><div class="cg" data-date="2026-10-2"><span class="gn">2</span></div><div class="cg" data-date="2026-10-3"><span class="gn">3</span></div>
-    <div class="cg he" data-date="2026-10-4"><span class="gn">4</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-10-5"><span class="gn">5</span></div><div class="cg" data-date="2026-10-6"><span class="gn">6</span></div><div class="cg" data-date="2026-10-7"><span class="gn">7</span></div><div class="cg" data-date="2026-10-8"><span class="gn">8</span></div><div class="cg" data-date="2026-10-9"><span class="gn">9</span></div><div class="cg" data-date="2026-10-10"><span class="gn">10</span></div>
-    <div class="cg he" data-date="2026-10-11"><span class="gn">11</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-10-12"><span class="gn">12</span></div><div class="cg" data-date="2026-10-13"><span class="gn">13</span></div><div class="cg" data-date="2026-10-14"><span class="gn">14</span></div><div class="cg" data-date="2026-10-15"><span class="gn">15</span></div><div class="cg" data-date="2026-10-16"><span class="gn">16</span></div><div class="cg" data-date="2026-10-17"><span class="gn">17</span></div>
-    <div class="cg he" data-date="2026-10-18"><span class="gn">18</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 007</span></div></div>
-    <div class="cg" data-date="2026-10-19"><span class="gn">19</span></div><div class="cg" data-date="2026-10-20"><span class="gn">20</span></div><div class="cg" data-date="2026-10-21"><span class="gn">21</span></div><div class="cg" data-date="2026-10-22"><span class="gn">22</span></div><div class="cg" data-date="2026-10-23"><span class="gn">23</span></div><div class="cg" data-date="2026-10-24"><span class="gn">24</span></div>
-    <div class="cg he" data-date="2026-10-25"><span class="gn">25</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-story">CF</span></div></div>
-    <div class="cg" data-date="2026-10-26"><span class="gn">26</span></div><div class="cg" data-date="2026-10-27"><span class="gn">27</span></div><div class="cg" data-date="2026-10-28"><span class="gn">28</span></div><div class="cg" data-date="2026-10-29"><span class="gn">29</span></div><div class="cg" data-date="2026-10-30"><span class="gn">30</span></div><div class="cg" data-date="2026-10-31"><span class="gn">31</span></div>
-    <div class="cg vuoto"></div>
+    <div class="cg"><span class="gn">1</span></div><div class="cg"><span class="gn">2</span></div><div class="cg"><span class="gn">3</span></div>
+    <div class="cg he"><span class="gn">4</span><div class="ep"><span class="pill t-filone">Filone</span></div></div>
+    <div class="cg"><span class="gn">5</span></div><div class="cg"><span class="gn">6</span></div><div class="cg"><span class="gn">7</span></div><div class="cg"><span class="gn">8</span></div><div class="cg"><span class="gn">9</span></div><div class="cg"><span class="gn">10</span></div>
+    <div class="cg he"><span class="gn">11</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">12</span></div><div class="cg"><span class="gn">13</span></div><div class="cg"><span class="gn">14</span></div><div class="cg"><span class="gn">15</span></div><div class="cg he"><span class="gn">16</span><div class="ep"><span class="pill t-scatto">Scatto</span></div></div><div class="cg"><span class="gn">17</span></div>
+    <div class="cg he"><span class="gn">18</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 007</span></div></div>
+    <div class="cg"><span class="gn">19</span></div><div class="cg"><span class="gn">20</span></div><div class="cg"><span class="gn">21</span></div><div class="cg"><span class="gn">22</span></div><div class="cg"><span class="gn">23</span></div><div class="cg he"><span class="gn">24</span><div class="ep"><span class="pill t-studio">Workshop</span></div></div>
+    <div class="cg he"><span class="gn">25</span><div class="ep"><span class="pill t-studio">Workshop</span></div></div>
+    <div class="cg"><span class="gn">26</span></div><div class="cg"><span class="gn">27</span></div><div class="cg"><span class="gn">28</span></div><div class="cg"><span class="gn">29</span></div><div class="cg"><span class="gn">30</span></div><div class="cg"><span class="gn">31</span></div>
   </div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er"><div class="ed">Dom 4</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-015</span> Luce autunnale</strong><br>Ombre lunghe su cemento.</div></div>
-    <div class="er"><div class="ed">Dom 11</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-016</span> Workshop location</strong><br>CityLife o Bovisa. Caption descrive senza vendere.</div></div>
-    <div class="er"><div class="ed">Dom 18</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-017</span> Luce autunnale</strong></div></div>
-    <div class="er"><div class="ed">Dom 18</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 007 — "A day in the margins."</strong><br>Annuncio workshop. Link in fondo.</div></div>
-    <div class="er"><div class="ed">Dom 25</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-018</span> Luce autunnale</strong></div></div>
-    <div class="er"><div class="ed">Dom 25</div><div class="et"><span class="tag t-story">Story</span></div><div class="ec"><strong>CF — Anteprima fanzine</strong><br>Mock-up fisico. Nessun prezzo. <em>"Coming November."</em></div></div>
+    <div class="er"><div class="ed">Dom 4</div><div class="et"><span class="tag t-filone">Filone</span></div><div class="ec">Uscita libera — filone emergente. Revisione coerenza progettuale dopo 3 mesi di materiale.</div></div>
+    <div class="er"><div class="ed">Dom 11</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-015</span></strong> <span class="df">Da produrre</span> Serie luce autunnale — ombre lunghe su cemento e pietra.</div></div>
+    <div class="er"><div class="ed">Ven 16</div><div class="et"><span class="tag t-scatto">Scatto</span></div><div class="ec">SR-016/017 — luce radente autunnale. Uscita dedicata al corpus.</div></div>
+    <div class="er"><div class="ed">Dom 18</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong><span class="cod">SR-016</span></strong> o slot filone emergente.</div></div>
+    <div class="er"><div class="ed">Dom 18</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 007 — "A day in the margins."</strong> Annuncio workshop costruito attorno a un'immagine. Descrivi la giornata senza venderla. Link in fondo.</div></div>
+    <div class="er"><div class="ed">24–25 Ott</div><div class="et"><span class="tag t-studio">Workshop</span></div><div class="ec"><strong>Workshop pilota</strong> — 4–6 persone da Close Friends. Gratuito o €50 simbolico. Testa il format. Raccogli recensioni scritte e foto dei partecipanti al lavoro.</div></div>
   </div></div>
+  <div class="ms-wrap"><div class="ms"><div class="ms-h">⚑ Milestone — workshop pilota</div><div class="ms-t">Il pilota non è un evento — è la condizione per vendere a prezzo pieno nel 2027. Se il copione non regge, si riscrive prima di novembre. Porta a casa almeno una recensione scritta.</div></div></div>
 </div>
 
-<!-- NOVEMBRE: inizia Dom 1 -->
-<!-- 1=Dom, 8=Dom, 15=Dom, 20=Gio, 22=Dom — NB 22 è Dom, lancio va domenica 22 -->
+<!-- NOVEMBRE -->
 <div class="mese-block" id="nov">
-  <div class="mese-header"><div class="mese-nome">Novembre</div><div class="mese-anno">2026</div><div class="mese-tema">Lancio fanzine · stampe</div></div>
+  <div class="mese-header"><div class="mese-nome">Novembre</div><div class="mese-anno">2026</div><div class="mese-tema">Lancio stampe · decompressione</div></div>
   <div class="cal-wrap"><div class="cal-griglia">
     <div class="cal-int">L</div><div class="cal-int">M</div><div class="cal-int">M</div><div class="cal-int">G</div><div class="cal-int">V</div><div class="cal-int">S</div><div class="cal-int">D</div>
     <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
-    <div class="cg he" data-date="2026-11-1"><span class="gn">1</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-11-2"><span class="gn">2</span></div><div class="cg" data-date="2026-11-3"><span class="gn">3</span></div><div class="cg" data-date="2026-11-4"><span class="gn">4</span></div><div class="cg" data-date="2026-11-5"><span class="gn">5</span></div><div class="cg" data-date="2026-11-6"><span class="gn">6</span></div><div class="cg" data-date="2026-11-7"><span class="gn">7</span></div>
-    <div class="cg he" data-date="2026-11-8"><span class="gn">8</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-11-9"><span class="gn">9</span></div><div class="cg he" data-date="2026-11-10"><span class="gn">10</span><div class="ep"><span class="pill t-studio">Prod.</span></div></div>
-    <div class="cg" data-date="2026-11-11"><span class="gn">11</span></div><div class="cg" data-date="2026-11-12"><span class="gn">12</span></div><div class="cg" data-date="2026-11-13"><span class="gn">13</span></div><div class="cg" data-date="2026-11-14"><span class="gn">14</span></div>
-    <div class="cg he" data-date="2026-11-15"><span class="gn">15</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-11-16"><span class="gn">16</span></div><div class="cg" data-date="2026-11-17"><span class="gn">17</span></div><div class="cg" data-date="2026-11-18"><span class="gn">18</span></div><div class="cg" data-date="2026-11-19"><span class="gn">19</span></div>
-    <div class="cg he" data-date="2026-11-20"><span class="gn">20</span><div class="ep"><span class="pill t-reel">Reel</span></div></div>
-    <div class="cg" data-date="2026-11-21"><span class="gn">21</span></div>
-    <div class="cg he" data-date="2026-11-22"><span class="gn">22</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 008</span></div></div>
-    <div class="cg" data-date="2026-11-23"><span class="gn">23</span></div><div class="cg" data-date="2026-11-24"><span class="gn">24</span></div><div class="cg" data-date="2026-11-25"><span class="gn">25</span></div><div class="cg" data-date="2026-11-26"><span class="gn">26</span></div><div class="cg" data-date="2026-11-27"><span class="gn">27</span></div><div class="cg" data-date="2026-11-28"><span class="gn">28</span></div>
-    <div class="cg he" data-date="2026-11-29"><span class="gn">29</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
-    <div class="cg" data-date="2026-11-30"><span class="gn">30</span></div>
-    <div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div><div class="cg vuoto"></div>
+    <div class="cg he"><span class="gn">1</span><div class="ep"><span class="pill t-studio">Selezione</span></div></div>
+    <div class="cg"><span class="gn">2</span></div><div class="cg"><span class="gn">3</span></div><div class="cg"><span class="gn">4</span></div><div class="cg"><span class="gn">5</span></div><div class="cg"><span class="gn">6</span></div><div class="cg"><span class="gn">7</span></div>
+    <div class="cg he"><span class="gn">8</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">9</span></div><div class="cg"><span class="gn">10</span></div><div class="cg"><span class="gn">11</span></div><div class="cg"><span class="gn">12</span></div><div class="cg"><span class="gn">13</span></div><div class="cg he"><span class="gn">14</span><div class="ep"><span class="pill t-reel">Reel</span></div></div>
+    <div class="cg he"><span class="gn">15</span><div class="ep"><span class="pill t-feed">Feed</span></div></div>
+    <div class="cg"><span class="gn">16</span></div><div class="cg"><span class="gn">17</span></div><div class="cg"><span class="gn">18</span></div><div class="cg"><span class="gn">19</span></div><div class="cg he"><span class="gn">20</span><div class="ep"><span class="pill t-story">CF</span></div></div>
+    <div class="cg he"><span class="gn">22</span><div class="ep"><span class="pill t-feed">Feed</span><span class="pill t-nl">NL 008</span></div></div>
+    <div class="cg"><span class="gn">23</span></div><div class="cg"><span class="gn">24</span></div><div class="cg"><span class="gn">25</span></div><div class="cg"><span class="gn">26</span></div><div class="cg"><span class="gn">27</span></div><div class="cg"><span class="gn">28</span></div>
+    <div class="cg he"><span class="gn">29</span><div class="ep"><span class="pill t-studio">Corso</span></div></div>
+    <div class="cg"><span class="gn">30</span></div>
   </div></div>
   <div class="detail-wrap"><div class="dm">
-    <div class="er"><div class="ed">Dom 1</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-019</span> Slot aperto</strong></div></div>
-    <div class="er"><div class="ed">Dom 8</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong><span class="cod">SR-020</span> Slot aperto</strong></div></div>
-    <div class="er"><div class="ed">Lun 10</div><div class="et"><span class="tag t-studio">Studio</span></div><div class="ec"><strong>Produzione fanzine</strong><br>12–14 immagini. 50 copie numerate. Stampe P600: SR-001, SR-009, SR-012.</div></div>
-    <div class="er"><div class="ed">Dom 15</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Da produrre</span><strong>Slot pre-lancio</strong><br>Immagine ponte verso il lancio.</div></div>
-    <div class="er"><div class="ed">Gio 20</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec"><strong>Fanzine fisica — sfogliata lenta</strong><br>Solo suono ambiente. Nessun testo. Nessun commento.</div></div>
-    <div class="er"><div class="ed">Dom 22</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong>Lancio fanzine + stampe + workshop</strong><br><em>"Milan / Pontremoli / Berlin. 2026. Six months. One machine. Still Running, Vol. I — 50 copies, numbered."</em></div></div>
-    <div class="er"><div class="ed">Dom 22</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 008 — "Six months. One machine."</strong><br>Tutti e tre i prodotti linkati.</div></div>
-    <div class="er"><div class="ed">Dom 29</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><span class="df">Slot aperto</span><strong>Post-lancio · follow-up</strong></div></div>
-  </div></div>
-  <div class="ms-wrap"><div class="ms">
-    <div class="ms-h">⚑ Milestone novembre — obiettivo 1.000–1.500 follower attivi</div>
-    <div class="ms-t">Tre prodotti live: <strong>fanzine Vol. I</strong> (50 copie numerate) · <strong>stampe fine art</strong> SR-001/009/012 (10 copie · €180/€320) · <strong>workshop gennaio 2027</strong></div>
+    <div class="er"><div class="ed">Sett 1</div><div class="et"><span class="tag t-studio">Studio</span></div><div class="ec"><strong>Selezione stampe fine art</strong> — SR-008 + 2 migliori Berlino. 10 copie per immagine, numerate, certificate.</div></div>
+    <div class="er"><div class="ed">Dom 8</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">Slot corpus — immagine autunnale o Berlino.</div></div>
+    <div class="er"><div class="ed">Ven 14</div><div class="et"><span class="tag t-reel">Reel</span></div><div class="ec">Stampa su Baryta — sfogliata lenta. Solo suono ambiente. Nessun testo a schermo. Anticipa il lancio.</div></div>
+    <div class="er"><div class="ed">Dom 15</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec">Immagine forte — preparazione al lancio.</div></div>
+    <div class="er"><div class="ed">Ven 20</div><div class="et"><span class="tag t-story">Story</span></div><div class="ec">CF: anteprima stampe fisiche sul tavolo. Nessun prezzo ancora. "Available Sunday."</div></div>
+    <div class="er"><div class="ed">Dom 22</div><div class="et"><span class="tag t-feed">Feed</span></div><div class="ec"><strong>Lancio stampe fine art.</strong> Caption EN: <em>Milan / Berlin. 2026. / Fine art prints, limited edition. / Link in bio.</em></div></div>
+    <div class="er"><div class="ed">Dom 22</div><div class="et"><span class="tag t-nl">NL</span></div><div class="ec"><strong>No. 008</strong> — lettera di lancio stampe. La sequenza descritta a posteriori.</div></div>
+    <div class="er"><div class="ed">Da dic</div><div class="et"><span class="tag t-studio">Corso</span></div><div class="ec">Inizio scrittura copione Modulo 01 corso registrato. Nessuna pressione di scatto.</div></div>
   </div></div>
 </div>
 
 <!-- 2027 -->
 <div class="sa" id="y27">
-  <div class="at">2027<em>→</em></div>
-  <div class="ad">Regime · Workshop · Corso · Vol. II</div>
+  <div class="at">20<em>27</em></div>
+  <div class="ad">Milestone principali — dettagli in bibbia v9 sezione 06</div>
   <div class="ml">
-    <div class="m27"><div class="m27-d">Dicembre 2026</div><div class="m27-t"><strong>Decompressione.</strong> Evadi ordini. Inizia copione Modulo 01. Nessuna pressione.</div></div>
-    <div class="m27"><div class="m27-d">Gennaio 2027</div><div class="m27-t"><strong>Primo scouting Vol. II.</strong> Filone A o C. 2 giorni. NL No. 010.</div></div>
-    <div class="m27"><div class="m27-d u">Gen–Feb 2027</div><div class="m27-t"><strong>Pilota workshop "Systems at rest."</strong> 1 sabato · 3 persone CF · €50–80. Raccogli recensione scritta.</div></div>
-    <div class="m27"><div class="m27-d">Febbraio 2027</div><div class="m27-t"><strong>Debrief pilota.</strong> Copione aggiornato. Pagina workshop con recensione reale. Date primavera.</div></div>
-    <div class="m27"><div class="m27-d">Marzo 2027</div><div class="m27-t"><strong>Workshop in vendita.</strong> NL No. 012. Date pubbliche. Iscritti 48h anticipo.</div></div>
-    <div class="m27"><div class="m27-d">Apr–Ott 2027</div><div class="m27-t"><strong>Workshop ricorrenti.</strong> Half Day mensili "Systems at rest".</div></div>
-    <div class="m27"><div class="m27-d u">Giugno 2027</div><div class="m27-t"><strong>Lancio corso registrato.</strong> NL No. 015. Podia/Gumroad. €60–90. Reddito passivo.</div></div>
-    <div class="m27"><div class="m27-d">Luglio 2027</div><div class="m27-t"><strong>Viaggio Lione.</strong> Traboules, Croix-Rousse. NL No. 016.</div></div>
-    <div class="m27"><div class="m27-d">Agosto 2027</div><div class="m27-t"><strong>Pausa reale.</strong> Il sistema lavora senza di te.</div></div>
-    <div class="m27"><div class="m27-d">Ottobre 2027</div><div class="m27-t"><strong>Selezione per il libro.</strong> 20–24 candidati Vol. II.</div></div>
-    <div class="m27"><div class="m27-d u">Novembre 2027</div><div class="m27-t"><strong>Lancio Still Running Vol. II.</strong> Fanzine 50 copie. NL No. 020.</div></div>
-    <div class="m27"><div class="m27-d u">Dicembre 2027</div><div class="m27-t"><strong>Bivio del libro.</strong> Il corpus regge una proposta editoriale? Se sì: 2028 con dummy e portfolio review.</div></div>
+    <div class="m27"><div class="m27-d u">Gen–Feb 2027</div><div class="m27-t"><strong>⚑ Pilota workshop</strong> — 1 sabato, 3 persone CF, €50–80 simbolico. Primo scouting Vol. II (filoni A o C). Newsletter No. 010.</div></div>
+    <div class="m27"><div class="m27-d">Feb 2027</div><div class="m27-t"><strong>Debrief pilota.</strong> Copione aggiornato. Pagina workshop con recensione reale. Date primavera fissate.</div></div>
+    <div class="m27"><div class="m27-d u">Mar–Apr 2027</div><div class="m27-t"><strong>⚑ Workshop in vendita + lancio corso registrato.</strong> Newsletter No. 012. Trailer corso su Podia/Gumroad.</div></div>
+    <div class="m27"><div class="m27-d">Apr–Ott 2027</div><div class="m27-t"><strong>Workshop ricorrenti.</strong> Half Day mensili. Produzione Vol. II sui filoni A–G, 2 giorni/mese.</div></div>
+    <div class="m27"><div class="m27-d u">Lug 2027</div><div class="m27-t"><strong>Viaggio Lione.</strong> Traboules, Croix-Rousse. Newsletter No. 016.</div></div>
+    <div class="m27"><div class="m27-d">Ago 2027</div><div class="m27-t"><strong>Pausa reale.</strong> Workshop sospesi. Corso in vendita passiva.</div></div>
+    <div class="m27"><div class="m27-d u">Ott–Nov 2027</div><div class="m27-t"><strong>⚑ Lancio Still Running Vol. II.</strong> Fanzine 50 copie numerate. Newsletter No. 020.</div></div>
+    <div class="m27"><div class="m27-d">Dic 2027</div><div class="m27-t"><strong>Bivio del libro.</strong> Il corpus regge una proposta editoriale? Rispondi guardando le stampe fisiche, non il monitor.</div></div>
   </div>
 </div>
 
-</div>
+</div><!-- fine contenuto -->
+
 <script>
-// OGGI DINAMICO
-function evidenziaOggi(){
-  const oggi = new Date();
-  const a = oggi.getFullYear();
-  const m = oggi.getMonth()+1;
-  const g = oggi.getDate();
-  const key = `${a}-${m}-${g}`;
-  const cella = document.querySelector(`[data-date="${key}"]`);
-  if(cella){
-    cella.classList.add("oc");
-    const gn = cella.querySelector(".gn");
-    if(gn){
-      const dot = document.createElement("span");
-      dot.className = "dot";
-      gn.appendChild(dot);
-    }
-    // Scorri automaticamente al mese corrente
-    const meseBlock = cella.closest(".mese-block");
-    if(meseBlock) setTimeout(()=>meseBlock.scrollIntoView({behavior:"smooth",block:"start"}), 400);
-  }
-}
-document.addEventListener("DOMContentLoaded", evidenziaOggi);
-const ids=['mag','giu','lug','ago','set','ott','nov','y27'];
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
+// Evidenzia oggi
+const oggi = new Date();
+const dataOggi = `${oggi.getFullYear()}-${oggi.getMonth()+1}-${oggi.getDate()}`;
+const cella = document.querySelector(`[data-date="${dataOggi}"]`);
+if(cella){ cella.classList.add('oc'); }
+
+// Nav attivo allo scroll
+const mesi = ['mag','giu','lug','ago','set','ott','nov','y27'];
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
     if(e.isIntersecting){
-      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-      const btn=document.querySelector(`.nav-btn[href="#${e.target.id}"]`);
-      if(btn){btn.classList.add('active');btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const id = e.target.id;
+      const btn = document.querySelector(`.nav-btn[href="#${id}"]`);
+      if(btn) btn.classList.add('active');
     }
   });
-},{rootMargin:'-25% 0px -65% 0px'});
-ids.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+}, { threshold: 0.3 });
+mesi.forEach(id => {
+  const el = document.getElementById(id);
+  if(el) obs.observe(el);
+});
 </script>
 </body>
 </html>
